@@ -3,11 +3,16 @@ import random
 terminate = False
 
 while not terminate:
-    user_input = input("Roll the dice?").lower()
+    user_input = input("Roll the dice? ").lower()
     if user_input == "y":
-        roll_x = random.randint(1, 6)
-        roll_y = random.randint(1, 6)
-        print(f'({roll_x}, {roll_y})')
+        dices = int(input("How many dice to roll? "))
+        rolls = []
+        res = ""
+        for i in range(dices):
+            rand_roll = random.randint(1, 6)
+            rolls.append(str(rand_roll))
+        res.join(rolls)
+        print(f'({", ".join(rolls)})')
     elif user_input == "n":
         print("Thanks for playing!")
         terminate = True
