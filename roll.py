@@ -19,6 +19,7 @@ stats_dict = {
     "least_common": 0,
 }
 
+#TODO: make this look nicer
 def calculate_stats():
     print(stats_dict)
 
@@ -34,15 +35,16 @@ while not terminate:
         for i in range(dices):
             dice_counter += 1 #track num of dice rolls
             rand_roll = random.randint(1, 6) #roll a die
+
             #stats updates
             num_count[rand_roll] += 1 
             stats_dict["sum_rolls"] += rand_roll
             stats_dict["average"] = stats_dict["sum_rolls"] / dice_counter
+            max_val = max(num_count.values())
+            min_val = min(num_count.values())
+            stats_dict["most_common"] = [key for key, value in num_count.items() if value == max_val]
+            stats_dict["least_common"] = [key for key, value in num_count.items() if value == min_val]
 
-            #fix logic
-            stats_dict["most_common"] = max(num_count.values())
-            stats_dict["least_common"] = min(num_count.values())
-            
             #add roll to result
             rolls.append(str(rand_roll))
         print(f'({", ".join(rolls)})')
