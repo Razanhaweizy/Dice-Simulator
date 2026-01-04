@@ -65,7 +65,7 @@ A feature-rich command-line dice rolling simulator with statistical tracking, da
 
 1. Clone the repository:
 ```bash
-git clone git@github.com:Razanhaweizy/Dice-Simulator.git
+git clone [git@github.com:Razanhaweizy/Dice-Simulator.git](https://github.com/Razanhaweizy/Dice-Simulator.git)
 cd Dice-Simulator
 ```
 
