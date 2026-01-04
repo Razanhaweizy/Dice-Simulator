@@ -1,9 +1,12 @@
 import random
 from collections import Counter
+import os
+import json
 
 terminate = False
 dice_counter = 0
 die_face = 6 #default is 6
+file_path = "./save.txt"
 
 #dict that tracks the number of times a die digit is rolled
 num_count = {}
@@ -53,13 +56,15 @@ def reset_stats(user_reset=False) -> None:
 
 def display_menu() -> None:
     '''Helper function that prints out all menu options (features) to the terminal'''
-    print("* Type 'y' to roll a die")
-    print("* Type 'n' to terminate the program")
-    print("* Type 'c' to view how many dice you have rolled")
-    print("* Type 's' to see the stats of your dice rolls")
-    print("* Type 'h' to view a histogram of your dice rolls")
+    print("* Type 'y' to roll a die.")
+    print("* Type 'n' to terminate the program. *Note* your progress will be automatically saved.")
+    print("* Type 'c' to view how many dice you have rolled.")
+    print("* Type 's' to see the stats of your dice rolls.")
+    print("* Type 'h' to view a histogram of your dice rolls.")
     print("* Type 'f' to change the face of your die. The options are: d4, d6, d8, d10, d12, d20, d100 *NOTE* this will reset your stats, don't forget to save :)")
-    print("* Type 'r' to reset your stats. This will also reset your chosen die face to default")
+    print("* Type 'r' to reset your stats. This will also reset your chosen die face to default.")
+    print("* Type 'v' to save your progress.")
+    print("* Type 'l' to load your most recent save. This will delete unsaved progress.")
     return
 
 def get_die_face(choice: str) -> None:
@@ -134,11 +139,56 @@ def draw_histogram(data, bar_char='*') -> None:
     for label, count in sorted(counts.items()):
         bar = bar_char * count
         print(f"{str(label).rjust(max_label_length)} | {bar} ")
-
     return
     
+#TODO add docstring
+def save_progress() -> None:
+    if not os.path.exists(file_path):
+        open(file_path, "x")
+
+    save_data = {
+        "dice_counter": dice_counter,
+        "die_face": die_face,
+        "stats_dict": stats_dict,
+        "num_count": num_count
+    }
+
+    with open(file_path, "w") as save_file:
+        json.dump(save_data, save_file)
+
+    print("Your progress have been saved >.< ")
+    return
+
+#TODO add docstring
+def load_save() -> None:
+    if not os.path.exists(file_path):
+        print("No save file found.. ")
+        return
+    
+    global dice_counter
+    global num_count
+    global stats_dict
+    global die_face
+
+    try:
+        with open(file_path, "r") as save_file:
+            save_data = json.load(save_file)
+            
+            dice_counter = save_data["dice_counter"]
+            num_count = save_data["num_count"]
+            stats_dict = save_data["stats_dict"]
+            die_face = save_data["die_face"]
+
+            num_count = {int(k): v for k, v in num_count.items()}
+
+            print("Successfully loaded save :D")
+    except (json.JSONDecodeError, KeyError) as error:
+        print("Unfortunaley did not load the save...")
+        print("Starting clean")
+    return
 
 populate_dict() #populate dict before starting
+load_save()
 
 #main program loop
 while not terminate:
@@ -159,6 +209,7 @@ while not terminate:
         print(f'({", ".join(rolls)})')
     elif user_input == "n":
         print("Thanks for playing!")
+        save_progress()
         terminate = True
         continue
     elif user_input == "m":
@@ -179,6 +230,12 @@ while not terminate:
         continue
     elif user_input == "r":
         reset_stats(True)
+        continue
+    elif user_input == "v":
+        save_progress()
+        continue
+    elif user_input == "l":
+        load_save()
         continue
     else:
         print("Invalid choice :P")
