@@ -1,6 +1,5 @@
 import random
 from collections import Counter
-from typing import List
 
 terminate = False
 dice_counter = 0
@@ -88,6 +87,9 @@ def get_valid_int() -> int:
         dices = input("How many dice to roll? ")
         try:
             dices_valid = int(dices)
+            if dices_valid <= 0:
+                print("Dice roll can't be 0 or negative, try again =)")
+                continue
             return dices_valid
         except ValueError:
             print("Invalid number, please enter a valid integer -_-")
