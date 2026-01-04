@@ -141,7 +141,6 @@ def draw_histogram(data, bar_char='*') -> None:
         print(f"{str(label).rjust(max_label_length)} | {bar} ")
     return
     
-#TODO add docstring
 def save_progress() -> None:
     '''Helper function that saves the stats and data using JSON format'''
     if not os.path.exists(file_path):
