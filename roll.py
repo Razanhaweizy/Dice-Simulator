@@ -21,6 +21,14 @@ stats_dict = {
     "least_common": 0,
 }
 
+def display_menu() -> None:
+    print("* Type 'y' to roll a die")
+    print("* Type 'n' to terminate the program")
+    print("* Type 'c' to view how many dice you have rolled")
+    print("* Type 's' to see the stats of your dice rolls")
+    print("* Type 'h' to view a histogram of your dice rolls")
+    return
+
 #TODO add docstring
 def get_valid_int(prompt: str) -> int:
     while True:
@@ -54,9 +62,12 @@ def draw_histogram(data, bar_char='*') -> None:
     for tup in data:
         for i in range(tup[1]):
             freq_lst.append(tup[0])
-
+            
+    if len(freq_lst) == 0:
+        print("You have not rolled any die ^_^ ")
+        return
+    
     counts = Counter(freq_lst)
-    max_count = max(counts.values())
     max_label_length = max(len(str(label)) for label in counts.keys())
 
     print("Histogram representation of dice roll frequencies: ")
@@ -69,7 +80,7 @@ while not terminate:
     if dice_counter == 100:
         print("Wow, you're locked in... you have officially rolled 100 times")
 
-    user_input = input("Roll the dice? Type c to view amount of dice rolled. s for stats. h for histogram ").lower()
+    user_input = input("Roll the dice? Type m to view the menu :3 ").lower()
 
     if user_input == "y":
         dices = get_valid_int("How many dice to roll? ")
@@ -85,6 +96,9 @@ while not terminate:
     elif user_input == "n":
         print("Thanks for playing!")
         terminate = True
+        continue
+    elif user_input == "m":
+        display_menu()
         continue
     elif user_input == "c":
         print(f"You have rolled {dice_counter} dices >_<")
