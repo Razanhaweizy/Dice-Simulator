@@ -1,4 +1,6 @@
 import random
+from collections import Counter
+from typing import List
 
 terminate = False
 dice_counter = 0
@@ -46,11 +48,28 @@ def display_stats():
     print(f"The most common value(s) rolled is: {stats_dict['most_common']}")
     print(f"The least common value(s) rolled is: {stats_dict['least_common']}")
 
+#TODO add docstring
+def draw_histogram(data, bar_char='*') -> None:
+    freq_lst = []
+    for tup in data:
+        for i in range(tup[1]):
+            freq_lst.append(tup[0])
+
+    counts = Counter(freq_lst)
+    max_count = max(counts.values())
+    max_label_length = max(len(str(label)) for label in counts.keys())
+
+    print("Histogram representation of dice roll frequencies: ")
+    for label, count in sorted(counts.items()):
+        bar = bar_char * count
+        print(f"{str(label).rjust(max_label_length)} | {bar} ")
+    
+
 while not terminate:
     if dice_counter == 100:
         print("Wow, you're locked in... you have officially rolled 100 times")
 
-    user_input = input("Roll the dice? Type c to view amount of dice rolled. s for stats ").lower()
+    user_input = input("Roll the dice? Type c to view amount of dice rolled. s for stats. h for histogram ").lower()
 
     if user_input == "y":
         dices = get_valid_int("How many dice to roll? ")
@@ -73,6 +92,8 @@ while not terminate:
     elif user_input == "s":
         display_stats()
         continue
+    elif user_input == "h":
+        draw_histogram(num_count.items())
     else:
         print("Invalid choice :P")
         continue
