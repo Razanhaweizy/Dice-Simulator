@@ -143,6 +143,7 @@ def draw_histogram(data, bar_char='*') -> None:
     
 #TODO add docstring
 def save_progress() -> None:
+    '''Helper function that saves the stats and data using JSON format'''
     if not os.path.exists(file_path):
         open(file_path, "x")
 
@@ -159,8 +160,8 @@ def save_progress() -> None:
     print("Your progress have been saved >.< ")
     return
 
-#TODO add docstring
 def load_save() -> None:
+    '''Helper function that loads previously saved data and handles cases of failed loads'''
     if not os.path.exists(file_path):
         print("No save file found.. ")
         return
